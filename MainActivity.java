@@ -25,8 +25,6 @@ public class MainActivity extends AppCompatActivity {
 
     EditText email_loginInput;
     EditText password_loginInput;
-    Button login;
-    TextView sign_in;
 
     private FirebaseAuth mAuth;
 
@@ -34,10 +32,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         email_loginInput = findViewById(R.id.email_login);
         password_loginInput = findViewById(R.id.password_login);
-        login = findViewById(R.id.login_button);
-        sign_in = findViewById(R.id.sign_In);
+        Button login = findViewById(R.id.login_button);
+        TextView sign_in = findViewById(R.id.sign_In);
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -53,16 +52,16 @@ public class MainActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            loginIn();
+            loginIn(email_loginInput,password_loginInput);
             }
         });
 
     }
 
-    public void loginIn() {
+    public void loginIn(EditText email, EditText password) {
 
-        String email_login = email_loginInput.getText().toString();
-        String password_login = password_loginInput.getText().toString();
+        String email_login = email.getText().toString();
+        String password_login = password.getText().toString();
 
         mAuth.signInWithEmailAndPassword(email_login, password_login).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
@@ -74,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
 
                     Intent intent_user_view = new Intent(MainActivity.this, View_Data.class);
                     intent_user_view.putExtra("uid", user.getUid());
+
                     startActivity(intent_user_view);
 
                 } else {

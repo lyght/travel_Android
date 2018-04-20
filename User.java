@@ -13,20 +13,23 @@ public class User {
 
 
     private String country;
-    private List<String> cities= new ArrayList<>();
+    //private List<String> cities= new ArrayList<>();
+    private String[] prout ;
 
-    public User(String country, List<String> cities) {
+    public User(String country, String[] prout) {
 
         this.country = country;
-        this.cities = cities;
+      //  this.cities = cities;
+        this.prout=prout;
     }
 
-    @SerializedName("Country")
+
     public String getCountry() {
         return country;
     }
+    public String[] getProut() {
 
-    public List<String> getCities() {
-        return cities;
-    }
+        return prout;}
+
+    //public List<String> getCities() {return cities;}
 }

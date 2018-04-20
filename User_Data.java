@@ -15,8 +15,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -25,7 +23,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.Callback;
 
 public class User_Data extends AppCompatActivity {
-     private String token;
+
+    private String token;
     private static String BASE_URL = "https://android-f21e8.firebaseio.com";
 
     @Override
@@ -51,8 +50,9 @@ public class User_Data extends AppCompatActivity {
             public void onClick(View view) {
                 getToken();
 
-                List<String> listCity = new ArrayList();
-                Call<User> call1 =api.setData(uid,"json",token, new User(country.getText().toString(),Arrays.asList(cities.getText().toString().split(","))));
+                ArrayList<String> listCity = new ArrayList();
+
+                Call<User> call1 =api.setData(uid,"json",token, new User(country.getText().toString(),cities.getText().toString().split(",")));
                 call1.enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
