@@ -13,23 +13,27 @@ public class User {
 
 
     private String country;
-    //private List<String> cities= new ArrayList<>();
-    private String[] prout ;
 
-    public User(String country, String[] prout) {
+    private List<String> cities = new ArrayList<>();
 
-        this.country = country;
-      //  this.cities = cities;
-        this.prout=prout;
+    public User( String country, List<String> cities) {
+
+        this.cities = cities;
+
+        this.country=country;
+    }
+
+
+    public List<String> getCities() {
+
+        return cities;
     }
 
 
     public String getCountry() {
+
         return country;
     }
-    public String[] getProut() {
 
-        return prout;}
 
-    //public List<String> getCities() {return cities;}
 }

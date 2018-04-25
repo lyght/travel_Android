@@ -25,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
 
     EditText email_loginInput;
     EditText password_loginInput;
-
     private FirebaseAuth mAuth;
 
     @Override
@@ -33,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // retrieve button en textView
         email_loginInput = findViewById(R.id.email_login);
         password_loginInput = findViewById(R.id.password_login);
         Button login = findViewById(R.id.login_button);
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-
+        //On Click go to signIn View
         sign_in.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent_signIn);
             }
         });
+
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,4 +90,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-}
+
+    }
+

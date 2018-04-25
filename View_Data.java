@@ -14,12 +14,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
-import com.google.gson.Gson;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
+import java.util.Arrays;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -28,14 +25,17 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class View_Data extends AppCompatActivity {
     private String token;
+
     private static String BASE_URL = "https://android-f21e8.firebaseio.com";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view__data);
-
         final String uid = getIntent().getStringExtra("uid");
-        final TextView view_data = findViewById(R.id.view_data);
+        final TextView country = findViewById(R.id.country);
+        final TextView cities = findViewById(R.id.cities);
+        //final String token = getIntent().getStringExtra("token");
+        country.setText(token);
         Button receive_button = findViewById(R.id.receive_button);
         Button add_travel = findViewById(R.id.add_travel);
         Retrofit retrofit = new Retrofit.Builder()
@@ -46,21 +46,27 @@ public class View_Data extends AppCompatActivity {
         final Api api = retrofit.create(Api.class);
 
 
+        token = getToken();
 
         receive_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Call<User> call2=api.getData();
+
+                Call<User> call2=api.getData(uid,"json",token);
                 call2.enqueue(new Callback<User>() {
                     @Override
                     public void onResponse(Call<User> call, Response<User> response) {
-                        //getToken();
-                        //view_data.setText(response.body().getCountry().toString());
-                        //Gson gson = new Gson();
-                        //travel_info info = gson.fromJson(response.body(),travel_info.class);
-                        view_data.setText(response.body().getCountry().toString());
-                        Toast.makeText(View_Data.this, response.body().getCountry().toString(),
-                                Toast.LENGTH_SHORT).show();
+
+
+                        country.setText(response.body().getCountry());
+                        String[] cities_list = new String[response.body().getCities().size()];
+
+                        cities_list= response.body().getCities().toArray(cities_list);
+                        String str = Arrays.toString(cities_list);
+
+                        cities.setText(str);
+                        /*Toast.makeText(View_Data.this, response.body().getPseudo().toString(),
+                                Toast.LENGTH_SHORT).show();*/
                     }
 
                     @Override
@@ -75,21 +81,25 @@ public class View_Data extends AppCompatActivity {
         add_travel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent_user_uid = new Intent(View_Data.this, User_Data.class);
+                Intent intent_user_uid = new Intent(View_Data.this, Add_Data.class);
                 intent_user_uid.putExtra("uid", uid);
+                intent_user_uid.putExtra("token",token);
                 startActivity(intent_user_uid);
             }
         });
     }
-    void getToken(){
+    String getToken () {
         FirebaseUser mUser = FirebaseAuth.getInstance().getCurrentUser();
+
         mUser.getIdToken(true)
                 .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
                     public void onComplete(@NonNull Task<GetTokenResult> task) {
                         if (task.isSuccessful()) {
                             String idToken = task.getResult().getToken();
                             // Send token to your backend via HTTPS
-                            token =idToken;
+                            token = idToken;
+                            //Toast.makeText(View_Data.this, token, Toast.LENGTH_SHORT).show();
+
                         } else {
                             // Handle error -> task.getException();
                             Toast.makeText(View_Data.this, "No token",
@@ -97,5 +107,7 @@ public class View_Data extends AppCompatActivity {
                         }
                     }
                 });
+        return token;
     }
+
 }
